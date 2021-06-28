@@ -1,13 +1,12 @@
-import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
+import React, {MouseEventHandler, useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 
 export const CanvasContent: React.FC = () => {
   const containerElement = useRef<HTMLDivElement>(null);
-  const [containerSize, setContainerSize] = useState<{ x: number; y: number }>({
-    x: 500,
-    y: 500,
-  });
+  const [containerSize, setContainerSize] = useState<{ x: number; y: number }|undefined>();
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>();
   const [towers,setTowers] = useState<{x1:number,x2:number,y1:number,y2:number}[]>([]);
+  const selectedTower = useRef(-1)
+  const isMouseDown = useRef(false)
   const canvas: HTMLCanvasElement | undefined = document.getElementById(
     "canvas"
   ) as HTMLCanvasElement;
@@ -25,15 +24,46 @@ export const CanvasContent: React.FC = () => {
     }
   }, [containerElement]);
 
+  const isOnTowerTop = (x:number,y:number) => {
+    const selectedTower = -1
+    for (let i = 0; i!==towers.length; i++) {
+      const {x1,x2} = towers[i]
+      if(x >= x1 && x <= x2) {
+        return i
+      }
+    }
+    return selectedTower
+  }
+
+  const handleMouseDown = (event:any) => {
+    const x = event.offsetX
+    const y = event.offsetY;
+    selectedTower.current = isOnTowerTop(x,y);
+    isMouseDown.current = true
+  }
+
+  const handleMouseUp = (event:any) => {
+    isMouseDown.current = false
+  }
+
+  const handleDrag = useCallback((event:any) => {
+    if(isMouseDown.current) {
+      //do stuff here, idk
+    }
+  },[isMouseDown,selectedTower])
+
   const onCanvasLoad = useCallback(() => {
     if (canvas != null) {
+      canvas.onmousedown = handleMouseDown
+      canvas.onmouseup = handleMouseUp
+      canvas.onmousemove = handleDrag
       const newCtx = canvas.getContext("2d");
       handleCanvasSize()
       if (newCtx) {
         setCtx(newCtx);
       }
     }
-  }, [setCtx, canvas]);
+  }, [setCtx, canvas,handleMouseUp,handleDrag,handleMouseDown]);
 
 
   const drawBoxOn = useCallback((box) => {
@@ -45,31 +75,31 @@ export const CanvasContent: React.FC = () => {
   },[ctx])
 
   const draw = useCallback(() => {
-    if(!ctx) return false;
+    if(!ctx) return;
     for (let i = 0; i < towers.length; i++) {
       drawBoxOn(towers[i]);
     }
   },[ctx,drawBoxOn,towers])
 
   const startDrawing = useCallback(() => {
-    if (ctx) {
+    if (ctx && containerSize) {
       canvas.height = containerSize.y;
       canvas.width = containerSize.x;
       draw()
-      // ctx.fillStyle = "red";
-      // ctx.fillRect(20, 20, 150, 100);
-      // ctx.fillRect(200, 20, 150, 100);
     }
   }, [ctx,canvas,containerSize,draw]);
 
   const generateTowers = useCallback(()=>{
-    setTowers([{x1:10,x2:40,y1:containerSize.y,y2:40}])
-  },[setTowers])
+    if(!containerSize) return;
+    setTowers([{x1:10,x2:100,y1:containerSize.y,y2:containerSize.y-40}])
+  },[setTowers,containerSize])
+
 
   useEffect(generateTowers,[containerSize])
   useEffect(onCanvasLoad, [canvas]);
   useEffect(handleCanvasSize,[containerElement])
-  useEffect(startDrawing, [ctx,containerSize]);
+  useEffect(generateTowers,[])
+  useEffect(startDrawing, [ctx,containerSize,towers]);
   useEffect(() => {
     function handleResize() {
       handleCanvasSize()
@@ -81,7 +111,7 @@ export const CanvasContent: React.FC = () => {
 
   return (
     <div className="h-screen w-screen p-16" id="canvasContainer" ref={containerElement}>
-      <canvas style={{ border: "1px solid black" }} id={"canvas"} />
+      <canvas style={{ border: "1px solid black" }} id={"canvas"}/>
     </div>
   );
 };

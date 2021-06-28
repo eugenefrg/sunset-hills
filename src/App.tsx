@@ -24,7 +24,7 @@ import {CanvasContent} from "./components/mainContent/canvasContent";
 function App() {
   return (
     <div className="App">
-      <HeroPage/>
+      {/*<HeroPage/>*/}
       {/*<MainContent/>*/}
       <CanvasContent/>
     </div>
