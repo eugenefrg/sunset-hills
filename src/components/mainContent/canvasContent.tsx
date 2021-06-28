@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 
 export const CanvasContent: React.FC = () => {
   const containerElement = useRef<HTMLDivElement>(null);
@@ -13,9 +13,12 @@ export const CanvasContent: React.FC = () => {
 
   const handleCanvasSize = useCallback(() => {
     if (containerElement) {
-      const containerHeight = containerElement.current!.offsetHeight;
-      const containerWidth = containerElement.current!.offsetWidth;
-      const newSize = {x:containerWidth,y:containerHeight};
+      const containerElementStyle = window.getComputedStyle(containerElement.current as Element, null)
+      const paddingY = Number(containerElementStyle.getPropertyValue("padding-top").replace("px",""))
+      const paddingX = Number(containerElementStyle.getPropertyValue("padding-left").replace("px",""))
+      const containerHeight = Number(containerElementStyle.getPropertyValue("height").replace('px',""));
+      const containerWidth = Number(containerElementStyle.getPropertyValue("width").replace('px',""));
+      const newSize = {x:containerWidth-(paddingX*2),y:containerHeight-(paddingY*2)};
       setContainerSize({...newSize})
     }
   }, [containerElement]);
@@ -34,20 +37,27 @@ export const CanvasContent: React.FC = () => {
     if (ctx) {
       canvas.height = containerSize.y;
       canvas.width = containerSize.x;
-
       ctx.fillStyle = "red";
       ctx.fillRect(20, 20, 150, 100);
       ctx.fillRect(200, 20, 150, 100);
     }
-  }, []);
+  }, [ctx,canvas,containerSize]);
 
 
-  useEffect(onCanvasLoad, []);
-  useEffect(handleCanvasSize,[])
-  useEffect(startDrawing, []);
+  useEffect(onCanvasLoad, [canvas]);
+  useEffect(handleCanvasSize,[containerElement])
+  useEffect(startDrawing, [ctx,containerSize]);
+  useEffect(() => {
+    function handleResize() {
+      handleCanvasSize()
+    }
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)}
+  })
 
   return (
-    <div className="h-screen w-screen p-16" ref={containerElement}>
+    <div className="h-screen w-screen p-16" id="canvasContainer" ref={containerElement}>
       <canvas style={{ border: "1px solid black" }} id={"canvas"} />
     </div>
   );
