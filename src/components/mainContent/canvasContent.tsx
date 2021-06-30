@@ -1,8 +1,6 @@
 import React, {
-  MouseEventHandler,
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -13,7 +11,6 @@ export const CanvasContent: React.FC = () => {
     { x: number; y: number } | undefined
   >();
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>();
-  // const [towers,setTowers] = useState<{x1:number,x2:number,y1:number,y2:number}[]>([]);
   const towers = useRef<{ x1: number; x2: number; y1: number; y2: number }[]>(
     []
   );
@@ -63,7 +60,6 @@ export const CanvasContent: React.FC = () => {
   const handleMouseDown = (event: any) => {
     const x = event.offsetX;
     const y = event.offsetY;
-    console.log(x, y);
     selectedTower.current = isOnTowerTop(x, y);
     isMouseDown.current = true;
   };
@@ -76,7 +72,7 @@ export const CanvasContent: React.FC = () => {
     (event: any) => {
       if (isMouseDown.current && selectedTower.current !== -1) {
         const rect = canvas.getBoundingClientRect();
-        const { x1, y1, x2, y2 } = towers.current[selectedTower.current];
+        const { y1, y2 } = towers.current[selectedTower.current];
         const mousePositionY =
           ((event.clientY - rect.top) / (rect.bottom - rect.top)) *
           canvas.height;
@@ -104,12 +100,12 @@ export const CanvasContent: React.FC = () => {
   }, [setCtx, canvas, handleMouseUp, handleDrag, handleMouseDown]);
 
   const getShadowOffset = (index: number) => {
-    const before = towers.current[index - 1];
+    const highestBefore:number = towers.current.slice(0, index).sort((a, b) => a.y2 - b.y2)[0].y2
     const current = towers.current[index];
-    if (before) {
-      return before.y2 - current.y2;
+    if (highestBefore) {
+      return highestBefore - current.y2;
     }
-    return undefined;
+    return 0;
   };
 
   const drawBoxOn = useCallback(
@@ -119,7 +115,7 @@ export const CanvasContent: React.FC = () => {
         y1 = box.y1,
         x2 = box.x2 - box.x1,
         y2 = box.y2 - box.y1;
-      ctx.beginPath();
+      ctx.beginPath()
       const shineGradient = ctx.createLinearGradient(box.x1, 0, box.x2, 0);
       shineGradient.addColorStop(0, "#ffbd00");
       shineGradient.addColorStop(0.16, "#ff5400");
@@ -127,20 +123,20 @@ export const CanvasContent: React.FC = () => {
       shineGradient.addColorStop(0.51, "#9e0059");
       shineGradient.addColorStop(1, "#390099");
 
-      // ctx.fillStyle = shineGradient;
-      // ctx.fillRect(x1,y1,x2,y2);
-
-      //drawShadow
-      ctx.beginPath();
-      // console.log(getShadowOffset(index))
-      if (index === 1) console.log(box.y1 - box.y2);
-      const shadowGradient = ctx.createLinearGradient(x1,y1,x2,y2-10);
-      shadowGradient.addColorStop(0, "#00000000");
-      shadowGradient.addColorStop(0.09, "#390099");
-      ctx.fillStyle = shadowGradient;
+      ctx.fillStyle = shineGradient;
       ctx.fillRect(x1,y1,x2,y2);
+
+      if(index!==0) {
+        ctx.beginPath()
+        const shadowOffset = getShadowOffset(index) || 0;
+        const shadowGradient = ctx.createLinearGradient(x1,(y1+y2)+shadowOffset,x1,(y1+y2+40)+shadowOffset);
+        shadowGradient.addColorStop(0, "#00000000");
+        shadowGradient.addColorStop(0.09, "#390099");
+        ctx.fillStyle = shadowGradient;
+        ctx.fillRect(x1,y1,x2,y2);
+      }
     },
-    [ctx]
+    [ctx,containerSize]
   );
 
   const draw = useCallback(() => {
@@ -162,10 +158,16 @@ export const CanvasContent: React.FC = () => {
 
   const generateTowers = useCallback(() => {
     if (!containerSize) return;
-
+    // I am also confused that the second Y value is negative. It works when it's that way
     towers.current = [
       { x1: 10, x2: 100, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 110, x2: 200, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 110, x2: 110+90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 220, x2: 220+90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 330, x2: 330+90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 440, x2: 440+90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 550, x2: 550+90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 660, x2: 660+90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 770, x2: 770+90, y1: containerSize.y, y2: containerSize.y - 40 },
     ];
   }, [towers, containerSize]);
 
@@ -190,7 +192,7 @@ export const CanvasContent: React.FC = () => {
       id="canvasContainer"
       ref={containerElement}
     >
-      <canvas style={{ border: "1px solid black" }} id={"canvas"} />
+      <canvas id={"canvas"} />
     </div>
   );
 };
