@@ -52,7 +52,7 @@ export const CanvasContent: React.FC = () => {
     return selectedTower;
   };
 
-  const handleMouseDown = (event: { offsetX: any }) => {
+  const handleMouseDown = (event: { offsetX: number }) => {
     const x = event.offsetX;
     selectedTower.current = isOnTowerTop(x);
     isMouseDown.current = true;
