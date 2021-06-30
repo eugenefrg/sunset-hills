@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React  from "react";
 import "./App.css";
-import { Rnd } from "react-rnd";
-import { MainContent } from "./components/mainContent";
 import {HeroPage} from "./components/hero";
 
 import "./styles/styles.css"
@@ -21,11 +19,10 @@ import {CanvasContent} from "./components/mainContent/canvasContent";
     Upgrade for Mobile responsiveness (The tower area can be resized too by generation)
  */
 
-function App() {
+const App:React.FC = () => {
   return (
     <div className="App">
       <HeroPage/>
-      {/*<MainContent/>*/}
       <CanvasContent/>
     </div>
   );

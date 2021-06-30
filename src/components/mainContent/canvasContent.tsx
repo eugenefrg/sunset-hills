@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 export const CanvasContent: React.FC = () => {
   const containerElement = useRef<HTMLDivElement>(null);
@@ -46,7 +41,7 @@ export const CanvasContent: React.FC = () => {
     }
   }, [containerElement]);
 
-  const isOnTowerTop = (x: number, y: number) => {
+  const isOnTowerTop = (x: number) => {
     const selectedTower = -1;
     for (let i = 0; i !== towers.current.length; i++) {
       const { x1, x2 } = towers.current[i];
@@ -57,19 +52,18 @@ export const CanvasContent: React.FC = () => {
     return selectedTower;
   };
 
-  const handleMouseDown = (event: any) => {
+  const handleMouseDown = (event: { offsetX: any }) => {
     const x = event.offsetX;
-    const y = event.offsetY;
-    selectedTower.current = isOnTowerTop(x, y);
+    selectedTower.current = isOnTowerTop(x);
     isMouseDown.current = true;
   };
 
-  const handleMouseUp = (event: any) => {
+  const handleMouseUp = () => {
     isMouseDown.current = false;
   };
 
   const handleDrag = useCallback(
-    (event: any) => {
+    (event: { clientY: number }) => {
       if (isMouseDown.current && selectedTower.current !== -1) {
         const rect = canvas.getBoundingClientRect();
         const { y1, y2 } = towers.current[selectedTower.current];
@@ -100,7 +94,9 @@ export const CanvasContent: React.FC = () => {
   }, [setCtx, canvas, handleMouseUp, handleDrag, handleMouseDown]);
 
   const getShadowOffset = (index: number) => {
-    const highestBefore:number = towers.current.slice(0, index).sort((a, b) => a.y2 - b.y2)[0].y2
+    const highestBefore: number = towers.current
+      .slice(0, index)
+      .sort((a, b) => a.y2 - b.y2)[0].y2;
     const current = towers.current[index];
     if (highestBefore) {
       return highestBefore - current.y2;
@@ -115,7 +111,7 @@ export const CanvasContent: React.FC = () => {
         y1 = box.y1,
         x2 = box.x2 - box.x1,
         y2 = box.y2 - box.y1;
-      ctx.beginPath()
+      ctx.beginPath();
       const shineGradient = ctx.createLinearGradient(box.x1, 0, box.x2, 0);
       shineGradient.addColorStop(0, "#ffbd00");
       shineGradient.addColorStop(0.16, "#ff5400");
@@ -124,19 +120,24 @@ export const CanvasContent: React.FC = () => {
       shineGradient.addColorStop(1, "#390099");
 
       ctx.fillStyle = shineGradient;
-      ctx.fillRect(x1,y1,x2,y2);
+      ctx.fillRect(x1, y1, x2, y2);
 
-      if(index!==0) {
-        ctx.beginPath()
+      if (index !== 0) {
+        ctx.beginPath();
         const shadowOffset = getShadowOffset(index) || 0;
-        const shadowGradient = ctx.createLinearGradient(x1,(y1+y2)+shadowOffset,x1,(y1+y2+40)+shadowOffset);
+        const shadowGradient = ctx.createLinearGradient(
+          x1,
+          y1 + y2 + shadowOffset,
+          x1,
+          y1 + y2 + 40 + shadowOffset
+        );
         shadowGradient.addColorStop(0, "#00000000");
         shadowGradient.addColorStop(0.09, "#390099");
         ctx.fillStyle = shadowGradient;
-        ctx.fillRect(x1,y1,x2,y2);
+        ctx.fillRect(x1, y1, x2, y2);
       }
     },
-    [ctx,containerSize]
+    [ctx, containerSize]
   );
 
   const draw = useCallback(() => {
@@ -161,13 +162,13 @@ export const CanvasContent: React.FC = () => {
     // I am also confused that the second Y value is negative. It works when it's that way
     towers.current = [
       { x1: 10, x2: 100, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 110, x2: 110+90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 220, x2: 220+90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 330, x2: 330+90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 440, x2: 440+90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 550, x2: 550+90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 660, x2: 660+90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 770, x2: 770+90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 110, x2: 110 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 220, x2: 220 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 330, x2: 330 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 440, x2: 440 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 550, x2: 550 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 660, x2: 660 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
+      { x1: 770, x2: 770 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
     ];
   }, [towers, containerSize]);
 
