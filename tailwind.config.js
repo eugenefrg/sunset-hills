@@ -5,6 +5,17 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    fontFamily: {
+      sans: ['Montserrat','sans-serif'],
+      serif: ['Montserrat','serif'],
+    },
+    colors: {
+      background1: "#AA6465",
+      white: "#FFFFFF",
+      orange: "#E6645B",
+      purple: "#2B1535",
+      "purple-light": "#553763"
+    },
     extend: {},
   },
   variants: {
