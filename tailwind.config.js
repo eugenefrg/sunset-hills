@@ -13,7 +13,8 @@ module.exports = {
       background1: "#AA6465",
       white: "#FFFFFF",
       orange: "#E6645B",
-      purple: "#2B1535"
+      purple: "#2B1535",
+      "purple-light": "#553763"
     },
     extend: {},
   },

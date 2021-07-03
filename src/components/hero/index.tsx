@@ -4,6 +4,7 @@ import Sea from "../../assets/hero/sea.svg";
 import { ReactComponent as MidRockLeft } from "../../assets/hero/midRockLeft.svg";
 import { ReactComponent as MidRockRight } from "../../assets/hero/midRockRight.svg";
 import { ReactComponent as BaseRock } from "../../assets/hero/baseRock.svg";
+import "../common.scss"
 
 export const HeroPage: React.FC = () => {
   return (
@@ -31,7 +32,7 @@ export const HeroPage: React.FC = () => {
               </div>
           </div>
           <div className="absolute h-screen w-full p-32">
-              <div className="space-y-6">
+              <div className="space-y-6 overlayed">
                   <h1 className="text-6xl font-bold text-white">Sunset Hills</h1>
                   <div>
                       <p className="text-2xl font-semibold text-white">when given an array of buildings, and the </p>

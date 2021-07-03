@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import SunRays from "../../assets/main/sunrays.svg";
 import Ground from "../../assets/main/ground.svg";
 import Clouds from "../../assets/main/clouds.svg";
+import "../common.scss"
 
 export const CanvasContent: React.FC = () => {
   const containerElement = useRef<HTMLDivElement>(null);
@@ -195,13 +196,18 @@ export const CanvasContent: React.FC = () => {
 
   return (
     <div
-      className="h-screen w-full bg-background1 bg-no-repeat bg-right-top"
+      className="h-screen w-full bg-background1 bg-no-repeat bg-right-top overlayed"
       id="canvasContainer"
       style={{backgroundImage:`url(${SunRays})`, backgroundSize:"200% 200%"}}
       ref={containerElement}
     >
       <div className={"absolute w-full pt-32"}>
         <img src={Clouds}/>
+      </div>
+      <div className="absolute w-full pt-32">
+          <p className="text-white text-4xl text-center font-bold">
+            Drag the top of any structure to resize
+          </p>
       </div>
       <canvas id={"canvas"} style={{backgroundImage:`url(${Ground})`, backgroundSize:"200% 200%"}} className="h-screen bg-right-top absolute" />
     </div>
