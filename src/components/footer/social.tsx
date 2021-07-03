@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { ReactComponent as GitHub } from "../../assets/social/github.svg";
 import { ReactComponent as Personal } from "../../assets/social/personal.svg";
 import { ReactComponent as Twitter } from "../../assets/social/twitter.svg";
@@ -58,4 +58,3 @@ export const Social: React.FC = () => {
     </div>
   );
 };
-// github linkedin personal youtube email
