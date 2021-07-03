@@ -1,9 +1,9 @@
-import React  from "react";
+import React from "react";
 import "./App.css";
-import {HeroPage} from "./components/hero";
-
-import "./styles/styles.css"
-import {CanvasContent} from "./components/mainContent/canvasContent";
+import { HeroPage } from "./components/hero";
+import "./styles/styles.css";
+import { CanvasContent } from "./components/mainContent/canvasContent";
+import { Footer } from "./components/footer";
 
 /*
     TO DO:
@@ -19,13 +19,14 @@ import {CanvasContent} from "./components/mainContent/canvasContent";
     Upgrade for Mobile responsiveness (The tower area can be resized too by generation)
  */
 
-const App:React.FC = () => {
+const App: React.FC = () => {
   return (
     <div className="App">
-      <HeroPage/>
-      <CanvasContent/>
+      <HeroPage />
+      <CanvasContent />
+      <Footer />
     </div>
   );
-}
+};
 
 export default App;

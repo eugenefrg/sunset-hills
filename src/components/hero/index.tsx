@@ -1,6 +1,4 @@
 import React from "react";
-// import { ReactComponent as Sun } from "../../assets/hero/sun.svg";
-// import { ReactComponent as Sea } from "../../assets/hero/sea.svg";
 import Sun from "../../assets/hero/sun.svg";
 import Sea from "../../assets/hero/sea.svg";
 import { ReactComponent as MidRockLeft } from "../../assets/hero/midRockLeft.svg";
@@ -11,7 +9,7 @@ export const HeroPage: React.FC = () => {
   return (
     <div className="bg-background1 h-screen">
       <div className="sea-sunset">
-        <div className="sun justify-center w-full absolute h-screen w-screen">
+        <div className="sun justify-center w-full absolute h-screen w-full">
             <img src={Sun} className="mx-auto h-full w-full object-cover"/>
         </div>
         <div className="sea flex items-end w-full absolute h-screen">

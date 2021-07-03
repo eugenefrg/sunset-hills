@@ -201,10 +201,9 @@ export const CanvasContent: React.FC = () => {
       ref={containerElement}
     >
       <div className={"absolute w-full pt-32"}>
-        <marquee style={{ color: 'red', fontSize: '3em' }}>Test</marquee>
         <img src={Clouds}/>
       </div>
-      <canvas id={"canvas"} style={{backgroundImage:`url(${Ground})`, backgroundSize:"200% 200%"}} className="h-full bg-right-top" />
+      <canvas id={"canvas"} style={{backgroundImage:`url(${Ground})`, backgroundSize:"200% 200%"}} className="h-screen bg-right-top absolute" />
     </div>
   );
 };
