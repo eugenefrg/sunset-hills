@@ -1,4 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import SunRays from "../../assets/main/sunrays.svg";
+import Ground from "../../assets/main/ground.svg";
+import Clouds from "../../assets/main/clouds.svg";
 
 export const CanvasContent: React.FC = () => {
   const containerElement = useRef<HTMLDivElement>(null);
@@ -14,6 +17,7 @@ export const CanvasContent: React.FC = () => {
   const canvas: HTMLCanvasElement | undefined = document.getElementById(
     "canvas"
   ) as HTMLCanvasElement;
+  const towerMaxSize = 80
 
   const handleCanvasSize = useCallback(() => {
     if (containerElement) {
@@ -70,7 +74,7 @@ export const CanvasContent: React.FC = () => {
         const mousePositionY =
           ((event.clientY - rect.top) / (rect.bottom - rect.top)) *
           canvas.height;
-        if (y1 - y2 >= 40 && y1 - mousePositionY >= 40) {
+        if (y1 - y2 >= towerMaxSize && y1 - mousePositionY >= towerMaxSize) {
           towers.current[selectedTower.current].y2 = mousePositionY;
         }
         draw();
@@ -113,11 +117,11 @@ export const CanvasContent: React.FC = () => {
         y2 = box.y2 - box.y1;
       ctx.beginPath();
       const shineGradient = ctx.createLinearGradient(box.x1, 0, box.x2, 0);
-      shineGradient.addColorStop(0, "#ffbd00");
-      shineGradient.addColorStop(0.16, "#ff5400");
-      shineGradient.addColorStop(0.34, "#ff0054");
-      shineGradient.addColorStop(0.51, "#9e0059");
-      shineGradient.addColorStop(1, "#390099");
+      shineGradient.addColorStop(0, "#FCD161");
+      shineGradient.addColorStop(0.16, "#FCA162");
+      shineGradient.addColorStop(0.34, "#E7655B");
+      shineGradient.addColorStop(0.51, "#9B3467");
+      shineGradient.addColorStop(1, "#39193C");
 
       ctx.fillStyle = shineGradient;
       ctx.fillRect(x1, y1, x2, y2);
@@ -129,10 +133,10 @@ export const CanvasContent: React.FC = () => {
           x1,
           y1 + y2 + shadowOffset,
           x1,
-          y1 + y2 + 40 + shadowOffset
+          y1 + y2 + towerMaxSize + shadowOffset - 60
         );
         shadowGradient.addColorStop(0, "#00000000");
-        shadowGradient.addColorStop(0.09, "#390099");
+        shadowGradient.addColorStop(0.09, "#39193C");
         ctx.fillStyle = shadowGradient;
         ctx.fillRect(x1, y1, x2, y2);
       }
@@ -159,17 +163,19 @@ export const CanvasContent: React.FC = () => {
 
   const generateTowers = useCallback(() => {
     if (!containerSize) return;
-    // I am also confused that the second Y value is negative. It works when it's that way
-    towers.current = [
-      { x1: 10, x2: 100, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 110, x2: 110 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 220, x2: 220 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 330, x2: 330 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 440, x2: 440 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 550, x2: 550 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 660, x2: 660 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
-      { x1: 770, x2: 770 + 90, y1: containerSize.y, y2: containerSize.y - 40 },
-    ];
+    const startingPoint = 30;
+    const towerWidth = 150;
+    const space = 30;
+    const towerCount = Math.floor(containerSize.x / (towerWidth+space))
+    const y1 = containerSize.y
+    const y2 = containerSize.y - towerMaxSize
+    const newTowers:{x1: number, x2: number, y1: number, y2: number}[] = []
+    for (let i = 0; i!==towerCount; i++) {
+      const x1 = i===0? startingPoint: startingPoint + newTowers[i-1].x2 + space
+      const x2 = i===0? towerWidth+space : towerWidth + x1
+      newTowers.push({x1,x2,y1,y2})
+    }
+    towers.current = newTowers;
   }, [towers, containerSize]);
 
   useEffect(generateTowers, [containerSize]);
@@ -189,11 +195,16 @@ export const CanvasContent: React.FC = () => {
 
   return (
     <div
-      className="h-screen w-screen p-16"
+      className="h-screen w-full bg-background1 bg-no-repeat bg-right-top"
       id="canvasContainer"
+      style={{backgroundImage:`url(${SunRays})`, backgroundSize:"200% 200%"}}
       ref={containerElement}
     >
-      <canvas id={"canvas"} />
+      <div className={"absolute w-full pt-32"}>
+        <marquee style={{ color: 'red', fontSize: '3em' }}>Test</marquee>
+        <img src={Clouds}/>
+      </div>
+      <canvas id={"canvas"} style={{backgroundImage:`url(${Ground})`, backgroundSize:"200% 200%"}} className="h-full bg-right-top" />
     </div>
   );
 };
