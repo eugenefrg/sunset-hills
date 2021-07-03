@@ -31,13 +31,15 @@ npm install npm start
 - [x] Prototype of the towers with lighting  
 - [x] A Wireframe at least  
 - [x] Color Scheme for towers  
-- [ ] to create towers depending on screen size  
+- [x] to create towers depending on screen size  
 - [x] Color Scheme  for entire website  
 - [x] low-fi drawings of what I imagine it should look like  
-- [ ] Hero Page  component  
-- [ ] Main Content component  
-- [ ] CTA Component  
-- [ ] Footer Component  
+- [x] Hero Page  component  
+- [x] Main Content component  
+- [x] CTA Component  
+- [x] Footer Component  
+- [ ] Animations  
+- [ ] Mobile Responsive
   
   
 **Progress**  
