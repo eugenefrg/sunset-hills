@@ -112,3 +112,5 @@ I think it turned out OK
 **July 3, 2021**      
 Done the designing of at least just the colors , images and UI. Also managed to put in the dynamic generation of towers depending on the size. I have removed some elements from figma that I did not think was necessary, like the youtube, and email links, but I added a twitter username there. All seems to work nice on Desktop view at 1440x900. I'm looking to just have two breakpoints here, mobile and desktop.
 
+got the idea from here: https://www.youtube.com/watch?v=7C6l2HG0fJg&t=747s
+DesignCourse's Video
