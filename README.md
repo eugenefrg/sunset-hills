@@ -30,7 +30,7 @@ As of writing, I have been avoiding canvas for a long time, and I want to actual
 - [x] CTA Component    
 - [x] Footer Component    
 - [x] UI Animations    
-- [ ] Mobile Responsive
+- [x] Mobile Responsive
     
 **Progress**
 **July 1, 2021**            
@@ -55,3 +55,6 @@ Done the designing of at least just the colors , images and UI. Also managed to 
     
 **July 16, 2021** 
 Implemented animations on scrolling, where I got the idea from DesignCourse's [Video](https://www.youtube.com/watch?v=7C6l2HG0fJg&t=747s). Had a bit of trouble with it, but fixed it by changing the way I put in the SVG elements. I instead added the SVG as an element in the DOM, and then used rellax to do the movements. For the Call to Action element, I had to adjust the elements I want to move so I can make it work right because it's already traveled by the time it gets to the screen. Also added in some labels, and icons to make it look better
+
+**July 17, 2021**
+This is the final edit as to what features I think this project is going to have. Overall it's just a small project, but I wanted it to be functional on both mobile, PC, and tablet. It involved editing SVGs in Figma then copy pasta until I get the right behaviours I needed (ex. when it scrolls, it must not run out of ground. Also implemented a way to be able to play with the towers by locking the screen onto it, since I'm not able to reliably do it without a button press. It breaks alot - but this way it's at least easier to know if you're locked into it or not.
