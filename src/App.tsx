@@ -9,7 +9,6 @@ const App: React.FC = () => {
   return (
     <div className="App" style={{height:"300vh"}}>
       <HeroPage />
-      {/*<HeroPageV2/>*/}
       <MainContent />
       <Footer />
     </div>
