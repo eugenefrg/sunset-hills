@@ -1,0 +1,20 @@
+.cloud1 {
+  animation: cloud-anim 7s alternate-reverse infinite linear;
+}
+
+.cloud2 {
+  animation: cloud-anim 10s alternate-reverse infinite linear;
+}
+
+.cloud3 {
+  animation: cloud-anim 15s alternate-reverse infinite linear;
+}
+
+@keyframes cloud-anim {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100px);
+  }
+}
